@@ -1,0 +1,45 @@
+# ============================================================
+# PNAE Lite - orquestracao Docker (backend + frontend)
+#
+# Este arquivo vive no repositorio do BACKEND. Como o frontend esta em outro
+# repositorio, ele e referenciado como pasta IRMA (clonada lado a lado).
+# O backend usa H2 EM MEMORIA: nenhum servico de banco externo e necessario.
+#
+# Layout esperado:
+#   workspace/
+#   ├── backend/    (este repo, contem este docker-compose.yml)
+#   └── frontend/   (repo do frontend, clonado ao lado)
+#
+# Se o diretorio do frontend tiver outro nome, defina FRONTEND_PATH:
+#   FRONTEND_PATH=../pnae-frontend docker compose up --build
+#
+# Comando padrao (a partir desta pasta):
+#   docker compose up --build
+# ============================================================
+
+services:
+  backend:
+    build: .
+    container_name: pnae-backend
+    ports:
+      - "8080:8080"   # API + H2 console em http://localhost:8080/h2-console
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/cardapios"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  frontend:
+    build:
+      # Pasta irma; sobrescreva com FRONTEND_PATH se o nome for diferente.
+      context: ${FRONTEND_PATH:-../frontend}
+      args:
+        # O browser (no host) acessa o backend publicado em localhost:8080.
+        VITE_API_BASE_URL: "http://localhost:8080"
+    container_name: pnae-frontend
+    ports:
+      - "5173:80"     # UI em http://localhost:5173 (origem ja liberada no CORS)
+    depends_on:
+      backend:
+        condition: service_started
