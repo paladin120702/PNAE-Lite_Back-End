@@ -3,6 +3,30 @@
 API REST do **PNAE Lite** (Sistema Simplificado de Gestão de Merenda Escolar).
 Responsável pela modelagem do domínio, regras de negócio e persistência.
 
+
+## O que este projeto demonstra
+
+Projeto de portfólio com evidências para **Desenvolvimento Júnior** e **Suporte de Sistemas Júnior**:
+
+- **Desenvolvimento:** API REST em Java/Spring Boot, organização por domínio, validação de entrada e persistência com JPA/Hibernate.
+- **Análise de regras de negócio:** cálculo de consumo por aluno, verificação de estoque e rollback transacional quando falta algum ingrediente.
+- **Investigação de problemas:** respostas HTTP com motivos estruturados, consulta aos dados do ambiente H2 e reprodução de cenários de validação.
+- **Qualidade e documentação:** testes unitários e de integração, exemplos de chamadas e configuração do backend/frontend com Docker Compose.
+
+Evidências: [`ConsumoService`](src/main/java/com/pnaelite/estoque/application/ConsumoService.java), [`GlobalExceptionHandler`](src/main/java/com/pnaelite/shared/exception/GlobalExceptionHandler.java), [`ConsumoServiceTest`](src/test/java/com/pnaelite/estoque/application/ConsumoServiceTest.java) e [`ConsumoIntegrationTest`](src/test/java/com/pnaelite/estoque/ConsumoIntegrationTest.java).
+
+## Diagnóstico no ambiente local
+
+| Sintoma | Conferência sugerida |
+|---|---|
+| `400` em `/consumo` | Conferir os campos e as mensagens de validação do corpo enviado. |
+| `404` | Conferir os identificadores de escola, cardápio e ingredientes no ambiente usado. |
+| `422` | Comparar estoque disponível com `quantidadePorAluno × quantidadeAlunos`; é uma recusa da regra de negócio. |
+| Dados reiniciam com a aplicação | O H2 é em memória e o `DataSeeder` recria dados de exemplo. |
+| Frontend não chama a API | Conferir porta, URL base e origem liberada em `WebConfig`. |
+
+Para investigar um desconto, registrar o corpo da requisição, o status retornado e o estado do estoque antes/depois. O cenário de insuficiência deve preservar todo o estoque; os testes de integração documentam essa expectativa.
+
 ## Stack
 
 - **Java 17** + **Spring Boot 3.2.5**
