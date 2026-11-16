@@ -6,7 +6,7 @@ Responsável pela modelagem do domínio, regras de negócio e persistência.
 
 ## O que este projeto demonstra
 
-Projeto de portfólio com evidências para **Desenvolvimento Júnior** e **Suporte de Sistemas Júnior**:
+Projeto de portfólio com evidências para **Desenvolvimento Fullstack** e **Suporte de Sistemas Júnior**:
 
 - **Desenvolvimento:** API REST em Java/Spring Boot, organização por domínio, validação de entrada e persistência com JPA/Hibernate.
 - **Análise de regras de negócio:** cálculo de consumo por aluno, verificação de estoque e rollback transacional quando falta algum ingrediente.
